@@ -38,6 +38,27 @@ function formatD (d, patternOut, patternIn) {
   return d;
 }
 
+/**
+ * Convert date to excel format
+ * Excel date is stored as the number of days
+ * since 1900-01-01. There is a bug in excel, that date 1900-02-29 exists
+ * in excel, but it was not a leap year.
+ * Time is stored as a number between 0 and .99999 where 0 is 00:00 and .99999 is 23:59
+ * @param {Date} d - date to format
+ */
+function formatDExcel (d) {
+  const excelStartDate = new Date(1900, 0, 0);
+  const dMoment = moment(d);
+  let result = dMoment.diff(excelStartDate, 'days');
+  if (d > new Date('1900-02-28')) {
+    result += 1;
+  }
+  // Get the number of seconds passed today
+  const seconds = d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+  result += (.99999 * seconds) / 86399;
+  return result;
+}
+
 
 /**
  * Format dates
@@ -72,6 +93,7 @@ function convDate (d, patternIn, patternOut) {
 
 
 module.exports = {
-  formatD  : formatD,
-  convDate : convDate
+  formatD      : formatD,
+  formatDExcel : formatDExcel,
+  convDate     : convDate
 };
