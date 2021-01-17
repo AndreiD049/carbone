@@ -47,6 +47,7 @@ function formatD (d, patternOut, patternIn) {
  * @param {Date} d - date to format
  */
 function formatDExcel (d) {
+  if (!d) return '';
   const excelStartDate = new Date(1900, 0, 0);
   const dMoment = moment(d);
   let result = dMoment.diff(excelStartDate, 'days');
